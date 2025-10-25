@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Wallet, ShoppingCart, Store, LogOut, User } from 'lucide-react';
+import { Wallet, ShoppingCart, Store, LogOut, User, Briefcase, MessageSquare } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { Wallet as WalletType } from '../../types';
@@ -8,6 +8,9 @@ import { SellerDashboard } from './SellerDashboard';
 import { EnhancedProfilePage } from '../profile/EnhancedProfilePage';
 import { NotificationBell } from '../notifications/NotificationBell';
 import { ChatWindow } from '../chat/ChatWindow';
+import { WalletManager } from '../wallet/WalletManager';
+import { EnhancedJobManager } from '../jobs/EnhancedJobManager';
+import { CommunityForum } from '../community/CommunityForum';
 import './EnhancedUserDashboard.css';
 
 // Sound file for typing effect
@@ -15,7 +18,7 @@ const typingSound = new Audio('/sounds/typing.mp3');
 
 export const EnhancedUserDashboard = () => {
   const { profile, signOut } = useAuth();
-  const [mode, setMode] = useState<'buyer' | 'seller'>('buyer');
+  const [mode, setMode] = useState<'buyer' | 'seller' | 'jobs' | 'wallet' | 'community'>('buyer');
   const [showProfile, setShowProfile] = useState(false);
   const [wallet, setWallet] = useState<WalletType | null>(null);
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
@@ -156,14 +159,35 @@ export const EnhancedUserDashboard = () => {
             className={`mode-button ${mode === 'buyer' ? 'active' : ''}`}
           >
             <ShoppingCart size={20} />
-            <span>Buyer Mode</span>
+            <span>Buyer</span>
           </button>
           <button
             onClick={() => setMode('seller')}
             className={`mode-button ${mode === 'seller' ? 'active' : ''}`}
           >
             <Store size={20} />
-            <span>Seller Mode</span>
+            <span>Seller</span>
+          </button>
+          <button
+            onClick={() => setMode('jobs')}
+            className={`mode-button ${mode === 'jobs' ? 'active' : ''}`}
+          >
+            <Briefcase size={20} />
+            <span>Jobs</span>
+          </button>
+          <button
+            onClick={() => setMode('wallet')}
+            className={`mode-button ${mode === 'wallet' ? 'active' : ''}`}
+          >
+            <Wallet size={20} />
+            <span>Wallet</span>
+          </button>
+          <button
+            onClick={() => setMode('community')}
+            className={`mode-button ${mode === 'community' ? 'active' : ''}`}
+          >
+            <MessageSquare size={20} />
+            <span>Community</span>
           </button>
         </div>
       </header>
@@ -173,7 +197,11 @@ export const EnhancedUserDashboard = () => {
       </div>
 
       <main className="dashboard-main">
-        {mode === 'buyer' ? <BuyerDashboard /> : <SellerDashboard />}
+        {mode === 'buyer' && <BuyerDashboard />}
+        {mode === 'seller' && <SellerDashboard />}
+        {mode === 'jobs' && <EnhancedJobManager />}
+        {mode === 'wallet' && <WalletManager />}
+        {mode === 'community' && <CommunityForum />}
       </main>
 
       {activeChatId && (
