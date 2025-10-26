@@ -57,7 +57,7 @@ export const UserDashboard = () => {
             <div className="wallet-info">
               <div className="wallet-item">
                 <div className="label">Available</div>
-                <div className="value available">${wallet?.available_balance.toFixed(2) || '0.00'}</div>
+                <div className="value available">${wallet?.available_balance.toFixed(2) || '10.00'}</div>
               </div>
               <div className="wallet-item">
                 <div className="label">Pending</div>
