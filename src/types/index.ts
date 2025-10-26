@@ -73,6 +73,8 @@ export interface JobBid {
   seller_id: string;
   bid_amount: number;
   proposal: string;
+  delivery_time: number | null;
+  seller_comment: string | null;
   status: 'pending' | 'accepted' | 'rejected';
   created_at: string;
 }
@@ -88,7 +90,11 @@ export interface EscrowTransaction {
   status: 'active' | 'completed' | 'disputed' | 'refunded' | 'cancelled';
   work_submitted: boolean;
   work_submission_url: string | null;
+  work_text: string | null;
+  work_images: string[] | null;
   work_submitted_at: string | null;
+  revision_count: number;
+  buyer_feedback: string | null;
   dispute_reason: string | null;
   dispute_filed_by: 'buyer' | 'seller' | null;
   admin_notes: string | null;
@@ -97,6 +103,22 @@ export interface EscrowTransaction {
   completed_at: string | null;
   disputed_at: string | null;
   resolved_at: string | null;
+}
+
+export interface WorkRevision {
+  id: string;
+  job_id: string;
+  escrow_id: string | null;
+  seller_id: string;
+  buyer_id: string;
+  revision_number: number;
+  work_text: string | null;
+  work_images: string[] | null;
+  work_url: string | null;
+  buyer_feedback: string | null;
+  status: 'pending' | 'revision_requested' | 'approved' | 'rejected';
+  submitted_at: string;
+  reviewed_at: string | null;
 }
 
 export interface Notification {

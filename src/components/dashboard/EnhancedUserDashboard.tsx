@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Wallet, ShoppingCart, Store, LogOut, User, Briefcase, MessageSquare } from 'lucide-react';
+import { Wallet, ShoppingCart, Store, LogOut, User, Briefcase, MessageSquare, Shield } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { Wallet as WalletType } from '../../types';
@@ -11,6 +11,7 @@ import { ChatWindow } from '../chat/ChatWindow';
 import { WalletManager } from '../wallet/WalletManager';
 import { EnhancedJobManager } from '../jobs/EnhancedJobManager';
 import { CommunityForum } from '../community/CommunityForum';
+import { ClientEscrowPage } from '../escrow/ClientEscrowPage';
 import './EnhancedUserDashboard.css';
 
 // Sound file for typing effect
@@ -18,7 +19,7 @@ const typingSound = new Audio('/sounds/typing.mp3');
 
 export const EnhancedUserDashboard = () => {
   const { profile, signOut } = useAuth();
-  const [mode, setMode] = useState<'buyer' | 'seller' | 'jobs' | 'wallet' | 'community'>('buyer');
+  const [mode, setMode] = useState<'buyer' | 'seller' | 'jobs' | 'wallet' | 'community' | 'escrow'>('buyer');
   const [showProfile, setShowProfile] = useState(false);
   const [wallet, setWallet] = useState<WalletType | null>(null);
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
@@ -189,6 +190,13 @@ export const EnhancedUserDashboard = () => {
             <MessageSquare size={20} />
             <span>Community</span>
           </button>
+          <button
+            onClick={() => setMode('escrow')}
+            className={`mode-button ${mode === 'escrow' ? 'active' : ''}`}
+          >
+            <Shield size={20} />
+            <span>Escrow</span>
+          </button>
         </div>
       </header>
 
@@ -202,6 +210,7 @@ export const EnhancedUserDashboard = () => {
         {mode === 'jobs' && <EnhancedJobManager />}
         {mode === 'wallet' && <WalletManager />}
         {mode === 'community' && <CommunityForum />}
+        {mode === 'escrow' && <ClientEscrowPage />}
       </main>
 
       {activeChatId && (
